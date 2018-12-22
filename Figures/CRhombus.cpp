@@ -59,7 +59,7 @@ void CRhombus::Draw(Output* pOut) const
 bool CRhombus::PointInFigure(Point P1)
 {
 	// Check if the point lies inside the rhombus or no
-	bool condition = ( (abs((P1.x - Corner1.x)*1.0 / d) + abs((P1.y - Corner1.y)*1.0 / d)) <= 1 );
+	bool condition = ( (abs((P1.x - Corner1.x)*1.0 / (d*figSize)) + abs((P1.y - Corner1.y)*1.0 / (d*figSize))) <= 1 );
 	if (condition) {
 		return true;
 	}
@@ -81,7 +81,7 @@ void CRhombus::PrintInfo(Output * pOut)
 }
 
 void CRhombus::Save(ofstream &OutFile) {
-	OutFile << "Rhombus " << ID << " " << Corner1.x << " " << Corner1.y << " ";
+	OutFile << "Rhombus " << ID << " " << Corner1.x << " " << Corner1.y << " " << figSize << " ";
 }
 void CRhombus::Hide(bool h)
 {
@@ -104,36 +104,37 @@ void CRhombus::Load(string s)
 	this->ID = counter;
 	this->Corner1.x = stoi(arr[2]);
 	this->Corner1.y = stoi(arr[3]);
+	this->figSize = stof(arr[4]);
 	//Checks the draw color
-	if (arr[4] == "BLACK") {
+	if (arr[5] == "BLACK") {
 		DrawColor = BLACK;
 	}
-	else if (arr[4] == "BLUE") {
+	else if (arr[5] == "BLUE") {
 		DrawColor = BLUE;
 	}
-	else if (arr[4] == "WHITE") {
+	else if (arr[5] == "WHITE") {
 		DrawColor = WHITE;
 	}
-	else if (arr[4] == "RED") {
+	else if (arr[5] == "RED") {
 		DrawColor = RED;
 	}
-	else if (arr[4] == "GREEN") {
+	else if (arr[5] == "GREEN") {
 		DrawColor = GREEN;
 	}
 	//Checks the fill color
-	if (arr[5] == "BLACK") {
+	if (arr[6] == "BLACK") {
 		FillColor = BLACK;
 	}
-	else if (arr[5] == "BLUE") {
+	else if (arr[6] == "BLUE") {
 		FillColor = BLUE;
 	}
-	else if (arr[5] == "WHITE") {
+	else if (arr[6] == "WHITE") {
 		FillColor = WHITE;
 	}
-	else if (arr[5] == "RED") {
+	else if (arr[6] == "RED") {
 		FillColor = RED;
 	}
-	else if (arr[5] == "GREEN") {
+	else if (arr[6] == "GREEN") {
 		FillColor = GREEN;
 	}
 	this->FigGfxInfo.DrawClr = DrawColor;
@@ -141,10 +142,10 @@ void CRhombus::Load(string s)
 	this->isHidden = false;
 	this->Selected = false;
 	this->d = 150;
-	P1.x = Corner1.x + d; P1.y = Corner1.y;
-	P2.x = Corner1.x; P2.y = Corner1.y + d;
-	P3.x = Corner1.x - d; P3.y = Corner1.y;
-	P4.x = Corner1.x; P4.y = Corner1.y - d;
+	P1.x =(int)(Corner1.x + (d*figSize)); P1.y = Corner1.y;
+	P2.x = Corner1.x; P2.y =(int)(Corner1.y + (d*figSize));
+	P3.x = (int)(Corner1.x - (d*figSize)); P3.y = Corner1.y;
+	P4.x = Corner1.x; P4.y = (int)(Corner1.y - (d*figSize));
 }
 
 GfxInfo CRhombus::GetFigGfxInfo()

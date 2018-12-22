@@ -54,7 +54,7 @@ void CEllipse::Draw(Output* pOut) const
 //Check if the point in the figure or not
 bool CEllipse::PointInFigure(Point Corner1)
 {
-	bool condition = (pow( (Corner1.x - this->Corner1.x)*1.0 / dx , 2)+pow((Corner1.y - this->Corner1.y)*1.0 / dy, 2) <= 1);
+	bool condition = (pow( (Corner1.x - this->Corner1.x)*1.0 / (dx*figSize) , 2)+pow((Corner1.y - this->Corner1.y)*1.0 / (dy*figSize), 2) <= 1);
 	if (condition) {
 		return true;
 	}
@@ -68,7 +68,7 @@ void CEllipse::PrintInfo(Output * pOut)
 ////////////////////////////////////////////////////////////////////////////////////
 //Save all the info of the ellipse in text file
 void CEllipse::Save(ofstream &OutFile) {
-	OutFile << "Ellipse " << ID << " " << Corner1.x << " " << Corner1.y << " ";
+	OutFile << "Ellipse " << ID << " " << Corner1.x << " " << Corner1.y << " " << figSize << " ";
 }
 ////////////////////////////////////////////////////////////////////////////////////
 //
@@ -90,40 +90,41 @@ void CEllipse::Load(string s)
 		arr[k] = word;
 		k++;
 	}
-	this->type = RECTANGLE;
+	this->type = ELLIPSE;
 	this->ID = counter;
 	this->Corner1.x = stoi(arr[2]);
 	this->Corner1.y = stoi(arr[3]);
+	this->figSize = stof(arr[4]);
 	//Checks the draw color
-	if (arr[4] == "BLACK") {
+	if (arr[5] == "BLACK") {
 		DrawColor = BLACK;
 	}
-	else if (arr[4] == "BLUE") {
+	else if (arr[5] == "BLUE") {
 		DrawColor = BLUE;
 	}
-	else if (arr[4] == "WHITE") {
+	else if (arr[5] == "WHITE") {
 		DrawColor = WHITE;
 	}
-	else if (arr[4] == "RED") {
+	else if (arr[5] == "RED") {
 		DrawColor = RED;
 	}
-	else if (arr[4] == "GREEN") {
+	else if (arr[5] == "GREEN") {
 		DrawColor = GREEN;
 	}
 	//Checks the fill color
-	if (arr[5] == "BLACK") {
+	if (arr[6] == "BLACK") {
 		FillColor = BLACK;
 	}
-	else if (arr[5] == "BLUE") {
+	else if (arr[6] == "BLUE") {
 		FillColor = BLUE;
 	}
-	else if (arr[5] == "WHITE") {
+	else if (arr[6] == "WHITE") {
 		FillColor = WHITE;
 	}
-	else if (arr[5] == "RED") {
+	else if (arr[6] == "RED") {
 		FillColor = RED;
 	}
-	else if (arr[5] == "GREEN") {
+	else if (arr[6] == "GREEN") {
 		FillColor = GREEN;
 	}
 	this->FigGfxInfo.DrawClr = DrawColor;
@@ -131,8 +132,8 @@ void CEllipse::Load(string s)
 	this->isHidden = false;
 	this->Selected = false;
 	dx = 93.75, dy = 150;
-	P2 = { Corner1.x + dx, Corner1.y + dy }; //Upper right corner
-	P3 = { Corner1.x - dx, Corner1.y - dy }; //Lower left corner
+	P2 = {(int)(Corner1.x + dx*figSize),(int)(Corner1.y + dy*figSize)}; //Upper right corner
+	P3 = {(int)(Corner1.x - dx*figSize), (int)(Corner1.y - dy*figSize)}; //Lower left corner
 }
 ////////////////////////////////////////////////////////////////////////////////////
 //get the graphics info of the ellipse
